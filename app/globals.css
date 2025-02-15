@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar{
+  display:none;
+}
+
 :root {
   font-size: 10px;
   --main-color: #0E7490;

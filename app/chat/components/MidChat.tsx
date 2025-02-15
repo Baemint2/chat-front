@@ -68,7 +68,7 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
             toggleSideBar();
         } else {
             const fetchMessages = async () => {
-                const chatMessages = await getChatMessages(currentChatRoomId, userInfo?.id);
+                const chatMessages = await getChatMessages(currentChatRoomId, 0);
                 setMessages(chatMessages);
             };
 
@@ -90,6 +90,7 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
         }
     }, [currentChatRoomId, messages]);
 
+
     const handleLeaveRoom = async () => {
         if (!currentChatRoomId) return;
 
@@ -102,8 +103,6 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
         setIsLeaving(false);
         setCurrentChatRoomId(null); // 선택된 채팅방 해제
     };
-
-
 
     const toggleSideBar = () => {
 

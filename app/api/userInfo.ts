@@ -8,7 +8,7 @@ export const getUserInfo = async () => {
         return null;
     };
     try {
-        const response = await fetch(`http://localhost:8090/userInfo/${getCookie("username")}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/userInfo/${getCookie("username")}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

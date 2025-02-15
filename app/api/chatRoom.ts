@@ -4,7 +4,7 @@ export const updateLastSeenDt = (chatRoomId: number, userId: number | undefined)
         chatRoomId,
         userId
     }
-    fetch('http://localhost:8090/chat-room/last-seen-update', {
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat-room/last-seen-update`, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -16,20 +16,15 @@ export const updateLastSeenDt = (chatRoomId: number, userId: number | undefined)
 }
 
 // 채팅방 내의 메시지 목록 가져오기
-export const getChatMessages = async (chatRoomNo: number | undefined, userId: number | undefined) => {
-    const body = {
-        chatRoomId: chatRoomNo,
-        userId
-    }
-    const response = await fetch("http://localhost:8090/message/get", {
-        method: 'POST',
+export const getChatMessages = async (chatRoomNo: number | null, pageNum: number | undefined) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/message/get/${chatRoomNo}?page=${pageNum}`, {
+        method: 'get',
         headers: {
             'Content-Type': 'application/JSON'
-        },
-        body: JSON.stringify(body)
+        }
     })
     const data = await response.json()
-    return data.message
+    return data.content
 
 }
 
@@ -41,7 +36,7 @@ export const leaveChatRoom = (chatRoomId: number | null, userId: number | undefi
     }
 
     if (window.confirm("방을 나가시겠습니까?")) {
-        fetch(`http://localhost:8090/chat-room/leave`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat-room/leave`, {
             method: 'post',
             headers: {
                 'Content-Type' : 'application/json'
@@ -58,8 +53,9 @@ export const leaveChatRoom = (chatRoomId: number | null, userId: number | undefi
     }
 }
 
-export const getChatRoom = async (username: String) => {
-    const response = await fetch(`http://localhost:8090/chat-room/${username}`, {
+// 채팅방 정보 가져오기
+export const getChatRoom = async (username: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat-room/${username}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     });
