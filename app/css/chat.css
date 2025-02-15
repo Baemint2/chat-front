@@ -1,0 +1,860 @@
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+main {
+    display: flex;
+    height: auto;
+    justify-content: start;
+}
+
+/* 프로필 이미지 */
+.profile-image > div:first-child {
+    position: relative;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.profile-image > div:first-child::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 1px solid rgba(0,0,0, .0975);
+    border-radius: 100%;
+    content: '';
+}
+
+.profile-image img {width: 100%;}
+
+/* 동일한 문서 내 모든 선택자 앞에 .message 명시 */
+/* 메시지 박스 상위 div */
+.message .main > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1300px;
+}
+
+/* 메시지 박스 */
+.message .box {
+    display: flex;
+    width: 1300px;
+    height: 750px;
+    border: 1px solid #dbdbdb;
+    background-color: white;
+    font-size: 1.4rem;
+}
+
+/* 좌측: 채팅방 분류, 목록 */
+.message .left {
+    width: 350px;
+    overflow: auto;
+    border-right: 1px solid #dbdbdb;
+}
+
+
+/* 채팅방 탐색 */
+.message .left > div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    border-bottom: 1px solid #dbdbdb;
+    font-weight: bold;
+}
+
+.message .left > div:nth-child(1) a {position: relative;}
+
+.message .left > div:nth-child(1) img {
+    position: absolute;
+    bottom: -12px;
+    left: 130px;
+}
+
+/* 메시지 작성, 상세 정보, 이미지 첨부, 하트 이모티콘 아이콘 */
+.message .icon {width: 24px;}
+
+/* 채팅방 분류 (주요, 일반, 요청 등) */
+.message .left > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+}
+
+.message .left > div:nth-child(2) > * {
+    height: 100%;
+    flex-grow: 1;
+}
+
+.message .left > div:nth-child(2) a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 105px;
+    height: 100%;
+    font-weight: bold;
+}
+
+/* 채팅방 분류: 요청 */
+.message .left > div:nth-child(2) .request {flex-grow: 1;}
+
+.message .left > div:nth-child(2) .request a {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: right;
+    color: #0095f6;
+}
+
+/* 채팅방 목록 */
+.message .left > div:nth-child(3) {
+    padding-top: 8px;
+    max-height: 500px;
+    overflow: auto;
+}
+
+/* 채팅방 리스트 div */
+.message .msg-room {
+    width: 100%;
+    display: flex;
+    height: 72px;
+    padding: 8px 20px;
+    align-items: center;
+}
+
+.message .msg-room:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+/* 상대방 프로필 이미지 */
+.message .msg-room .profile-image > div {
+    width: 56px;
+    height: 56px;
+}
+
+/* 상대방 이름, 최근 메시지 */
+.message .msg-room > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 220px;
+}
+
+.message .msg-room > div:nth-child(2) > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 15px;
+}
+
+.message .msg-room > div:nth-child(2) > div:last-child {color: #737373;}
+
+/* 새로운 메시지 알림 */
+.message .msg-room .notify {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: var(--main-color);
+}
+
+/* 새로운 메시지가 있는 채팅방 (temp) */
+.message .msg-room .side-chat-room {width: 220px !important;}
+
+.message .msg-room .side-chat-room > * {
+    font-weight: bold;
+    color: black !important;
+}
+
+/* 요청된 메시지 채팅방 */
+.message .msg-request {display: none;}
+
+.message .msg-request > div:first-child {
+    padding: 14px;
+    color: #737373;
+}
+
+/* 우측: 메시지 안내 문구 */
+.message .mid-intro {
+    display: flex; /* flex 로 변경하기 */
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    width: 600px;
+    border-right: 1px solid #dbdbdb;
+}
+
+.message .right-intro {
+    display: none;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-grow: 1;
+    width: 400px;
+    flex-direction: column;
+}
+
+.message .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.message .chat-side-bar {
+    height: 0 !important;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    line-height: 60px;
+}
+
+.message .chat-search {
+    height: 30px;
+}
+
+.message .chat-search #search {
+    font-size: 1.5rem;
+    border-top: none;
+}
+
+.message .side-bar-img-wrap{
+    width: 100%;
+    padding-left: 20px;
+    max-height: 300px;
+    overflow: auto;
+    margin-top: 39px;
+    border-top: 1px solid #dbdbdb;
+}
+
+.message .side-bar-img-wrap img {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+.message .side-bar-img-wrap span {
+    margin-left: 10px;
+}
+
+.message .side-bar-img-wrap .send-message{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+
+
+.message .side-bar-img-wrap>div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+/*.message .side-bar-img-wrap span {*/
+/*    margin-left: 15px;*/
+/*}*/
+
+.message .intro hr {
+    width: 385px;
+}
+
+.message .intro > div:nth-child(1) {
+    position: relative;
+    height: 96px;
+}
+
+.message .intro .circle {
+    width: 96px;
+    height: 100%;
+    border: 3px solid black;
+    border-radius: 100%;
+}
+
+
+.profile-image img {
+    left: 24px;
+    bottom: 24px;
+    /*width: 45px;*/
+}
+
+.message .intro img {
+    /*position: absolute;*/
+    left: 24px;
+    bottom: 24px;
+    width: 45px;
+}
+
+.message .mid-intro img {
+    position: relative;
+    top: -70%;
+}
+
+.message .intro > div:nth-child(3) {
+    margin-top: 5px;
+    color: #737373;
+    text-align: center;
+}
+
+.message .intro .button {margin-top: 24px;}
+
+/* 메시지 보내기 버튼 */
+.message .mid-intro .send-message {
+    width: 120px;
+    border-radius: 7px;
+    text-align: center;
+    padding: 5px 15px;
+    border: 0;
+    background-color: var(--main-color);
+    color: #fff;
+    margin-top: 15px;
+}
+
+/* 알림 설정으로 이동 버튼 */
+.message .intro #move {width: 150px;}
+
+/* 숨김 아이콘 */
+.message .intro #hide {
+    left: 26px;
+    bottom: 26px;
+}
+
+/* 우측: 상대방 정보, 메시지 내용 */
+.message .right-chat {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    width: 500px;
+}
+
+.message .mid-chat {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    width: 600px;
+    border-right: 1px solid #dbdbdb;
+}
+
+/* 상대방 정보 */
+.message .chat-name {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    border-bottom: 1px solid #dbdbdb;
+    font-weight: bold;
+}
+
+.message #chatName {
+    display: flex;
+    width: 400px;
+}
+
+.message #chatName>div {
+    margin-left: 5px;
+}
+
+/* 상대방 프로필 이미지 */
+.message .chat-name .profile-image > div {
+    width: 30px;
+    height: 30px;
+    margin-left: 8px;
+}
+
+/* 상대방 이름 */
+.message .chat-name > div:nth-child(2) {margin-left: 12px;}
+
+/* 채팅방 상세 정보 */
+.message .chat-name > div:nth-child(3) {margin-left: auto;}
+
+.message .chat-name > div:nth-child(3) > a {display: flex;}
+
+.message .chat-window .profile-image img{
+    width: 60px;
+    height: 60px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, .0975);
+    border-radius: 100%;
+}
+
+/* 메시지 내용 */
+.message .chat-window > div:first-child {
+    height: 600px;
+    padding: 0 20px;
+    overflow: auto;
+}
+
+/* 채팅을 주고받은 날짜 */
+.message .datetime {
+    height: 50px;
+    /*padding-top: 12px;*/
+    color: #737373;
+    text-align: center;
+}
+
+.message .receive .chat-datetime {
+    margin-left: 5px;
+}
+
+.message .sent .chat-datetime {
+    margin-right: 5px;
+}
+
+.message .chat-datetime {
+    height: 50px;
+    padding-top: 12px;
+    color: #737373;
+    text-align: center;
+    display: flex;
+    align-items: flex-end;
+}
+
+/* 메시지 내용, 좋아요 */
+.message .output {
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+/* 메시지 내용 */
+.message .output .chat {
+    position: relative;
+    max-width: 280px;
+    padding: 10px 16px;
+    border-radius: 20px;
+}
+.message .sent .deleted-chat {
+    background-color: #fd834091;
+    color: white;
+}
+
+.message .receive .deleted-chat {
+    background-color: #efefef;
+    color: var(--sub-color);
+}
+
+.message .output .deleted-chat {
+    position: relative;
+    max-width: 280px;
+    padding: 10px 16px;
+    border-radius: 20px;
+}
+
+/* 메시지 좋아요 */
+.message .output .heart {
+    position: absolute;
+    bottom: -16px;
+    width: 36px;
+    height: 24px;
+    border: 2px solid white;
+    border-radius: 11px;
+    background-color: #efefef;
+}
+
+.message .output .heart img {
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    width: 13px;
+}
+
+/* 상대방이 보낸 메시지 */
+.message .receive .profile-image > div {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.message .receive .chat {background-color: #efefef;}
+
+.message .receive .heart {left: 0;}
+
+/* 내가 보낸 메시지 */
+.message .sent {
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.message .sent .chat {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.message .sent .heart {right: 0;}
+
+/* 메시지 입력 */
+.message .input {
+    height: 84px;
+    padding: 20px;
+}
+
+.message .input > div {
+    display: flex;
+    height: 100%;
+    border: 1px solid #dbdbdb;
+    border-radius: 25px;
+}
+
+.message .input form {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-left: 18px;
+}
+
+.message .input textarea {
+    width: 100%;
+    padding: 8px 9px;
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+/* 이미지 첨부, 하트 이모티콘 아이콘 */
+.message .input > div > div {
+    display: flex;
+    width: 40px;
+    margin: auto;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* 하트 이모티콘 아이콘 */
+.message .input > div > div:last-child {margin-right: 8px;}
+
+/* 요청된 메시지 안내 */
+.message .req {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.message .req > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 115px;
+    padding: 16px;
+    border-top: 1px solid #dbdbdb;
+    background-color: #fafafa;
+}
+
+.message .req > div:first-child > div:nth-child(1) > span {font-weight: bold;}
+
+.message .req > div:first-child > div:nth-child(2) {color: #737373;}
+
+.message .req > div:first-child > div:nth-child(3) {
+    margin-top: auto;
+    color: #737373;
+}
+
+/* 차단, 삭제, 수락 버튼 */
+.message .req > div:last-child {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    border-top: 1px solid #dbdbdb;
+}
+
+.message .req > div:last-child > div {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    font-weight: bold;
+}
+
+.message .req > div:last-child > div:not(:last-child) {border-right: 1px solid #dbdbdb;}
+
+.message .req > div:last-child > div:not(:last-child) a {color: #ed4956;}
+
+/* 우측: 채팅방 상세 정보 */
+.message .right-info {
+    display: none;
+    flex-grow: 1;
+}
+
+.message .right-info > * {padding: 0 16px;}
+
+.message .right-info > div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    padding: 0 20px;
+    border-bottom: 1px solid #dbdbdb;
+    font-weight: bold;
+}
+
+.message .right-info > div:nth-child(1) a {position: relative;}
+
+.message .right-info > div:nth-child(1) img {
+    position: absolute;
+    bottom: -12px;
+    left: 218px;
+}
+
+/* 메시지 알림 해제 */
+.message .right-info > div:nth-child(2) {
+    display: flex;
+    align-items: center;
+    height: 45px;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.message .right-info > div:nth-child(2) label {
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+/* 주요, 일반 폴더 이동 */
+.message .right-info > div:nth-child(3) {border-bottom: 1px solid #dbdbdb;}
+
+.message .right-info > div:nth-child(3) > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+    margin-top: 16px;
+}
+
+.message .right-info #move {
+    width: 60px;
+    cursor: pointer;
+}
+
+.message .right-info > div:nth-child(3) > div:last-child {
+    height: 40px;
+    margin: 16px 0;
+    color: #737373;
+}
+
+/* 상대방 정보 (프로필 이미지, 아이디, 이름) */
+.message .right-info > div:nth-child(4) {
+    padding: 16px 0;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.message .right-info > div:nth-child(4) > a:hover {
+    background-color: #f2f2f2;
+    transition-duration: 0.1s;
+}
+
+.message .right-info > div:nth-child(4) > span {
+    margin: 8px 0;
+    padding: 0 16px;
+    font-weight: bold;
+}
+
+.message .right-info > div:nth-child(4) > a {
+    display: flex;
+    align-items: center;
+    height: 72px;
+    padding: 8px 16px 0;
+}
+
+.message .right-info .profile-image > div {
+    width: 56px;
+    height: 56px;
+    margin-right: 12px;
+}
+
+.message .right-info .bold {font-weight: bold;}
+
+/* 채팅 삭제, 차단, 신고 버튼 */
+.message .right-info > div:nth-child(5) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 150px;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.message .right-info > div:nth-child(5) a {
+    font-weight: bold;
+    color: #ed4956;
+}
+
+.chat-room-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.message .leave-chat-room,
+.message .notify-off,
+.message .notify-on
+{
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    padding-top: 16px;
+}
+
+/*.leave-chat-room i {*/
+/*    margin-right: 15px;*/
+/*}*/
+
+.message .chat-room-wrap .intro>div:first-child {
+    display: flex;
+    align-items: flex-end;
+}
+
+.message .modal-content {
+    left: 120px;
+    width: 400px;
+}
+
+.message .modal-content div,
+.message .modal-content input,
+.message .modal-content button {
+    font-size: 1.5rem;
+}
+
+.message .modal-body {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.message .btn-close {
+    --bs-btn-close-opacity: 1;
+    color: #fff !important;
+}
+
+.message .modal-profile-image {
+    display: flex;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.message .modal-content .search-emp {
+    margin-left: 15px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.message .modal-content .search-emp input {
+    width: 20px;
+    height: 20px;
+}
+
+.message .modal-footer button {
+    width: 120px;
+    border-radius: 7px;
+    text-align: center;
+    padding: 5px 15px;
+    border: 0;
+    background-color: var(--main-color);
+    color: #fff;
+    margin-top: 15px;
+}
+
+.message #toggleSidebar img {
+    width: 20px;
+    height: 15px;
+    margin-left: 10px;
+    margin-bottom: 3px;
+}
+
+/* 사이드바 기본 스타일 */
+#rightSidebar {
+    /* 다른 스타일 속성들... */
+}
+.unread-count-badge {
+    background-color: var(--main-color);
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 1.4rem;
+}
+
+.modal-header {
+    justify-content: space-between;
+}
+
+.btn-chat-create {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.invite-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-user-div {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+/* 현재 선택된 채팅방 */
+.msg-room-list .active{
+    background-color: #8883;
+}
+
+/* 더보기 아이콘 */
+.fa-ellipsis-vertical {
+    display: none;
+}
+
+/* 삭제 드롭다운 */
+.chat-dropdown {
+    display: none; /* 초기에 드롭다운 숨김 */
+    position: relative;
+    z-index: 1000;
+    background-color: #fff;
+    border-radius: 5px;
+    font-size: 1.15rem;
+    box-shadow: 0 5px 9px rgba(0, 0, 0, 0.15);
+}
+
+.message .my-menu-item {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #4A90E2; /* 로딩 색상 */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.chat-room-item {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateX(-20px);
+}

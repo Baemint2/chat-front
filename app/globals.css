@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-size: 10px;
+  --main-color: #0E7490;
+  --sub-color: #BFC8CA;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-color: #0E7490;
+    --sub-color: #BFC8CA;
+  }
+}
+
+body {
+  color: var(--main-color);
+  background: var(--sub-color);
+  font-family: Arial, Helvetica, sans-serif;
+}
