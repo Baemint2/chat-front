@@ -6,28 +6,20 @@ import MessageItem from "./MessageItem";
 import messageImg from "@/public/img/message.png";
 import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 import question from "@/public/img/question.png";
-import { UserInfo } from "@/app/types/userTypes";
-import { Message } from "@/app/types/msgTypes";
+import { UserInfo } from "@/app/types/userinfo";
+import { Message } from "@/app/types/message";
 import InviteModal from "./modal/InviteModal";
 import {useStomp} from "@/app/StompContext";
 import {getChatMessages, leaveChatRoom} from "@/app/api/chatRoom";
 import Image from "next/image";
-
-interface IChatRoomInfo {
-    chatRoomId: number;
-    chatRoomTitle?: string;
-    createdAt: string;
-    creator: string;
-    participantUsers: UserInfo[]
-    updatedAt?: string
-}
+import {ChatRoom} from "@/app/types/chatroom";
 
 interface MidChatProps {
     currentChatRoomId: number | null
-    chatRoomInfo?: IChatRoomInfo
+    chatRoomInfo?: ChatRoom
     userInfo: UserInfo
     setCurrentChatRoomId: (chatRoomId: number | null) => void,
-    setChatRooms: React.Dispatch<React.SetStateAction<IChatRoomInfo[]>>
+    setChatRooms: React.Dispatch<React.SetStateAction<ChatRoom[]>>
 }
 
 const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userInfo, setCurrentChatRoomId, setChatRooms}) => {
@@ -40,6 +32,11 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
     const [messages, setMessages] = useState<Message[]>([]);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState<boolean>(false);
     const [isLeaving, setIsLeaving] = useState<boolean>(false)
+    const pageRef = useRef<number>(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [prevHeight, setPrevHeight] = useState<number>(0);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const isInitialLoadCompleteRef = useRef<boolean>(false);
 
     useEffect(() => {
         if (!stompClient || !isConnected || !currentChatRoomId) return;
@@ -54,42 +51,92 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
             }
         );
 
+        const subscription2 = stompClient.subscribe(
+            `/sub/chat/${currentChatRoomId}/message`,
+            (message) => {
+                const receivedMessage = JSON.parse(message.body);
+                console.log(receivedMessage);
+                setMessages((prevMessages) =>
+                    prevMessages.map((msg) =>
+                        msg.msgId === receivedMessage.msgId
+                            ? { ...msg, msgStat: receivedMessage.msgStat }
+                            : msg
+                    )
+                );
+            }
+        );
+
         return () => {
             subscription.unsubscribe();
+            subscription2.unsubscribe();
         };
     }, [stompClient, isConnected, currentChatRoomId]);
 
-    const deleteMessage = () => {
-        console.log("메시지 삭제")
-    }
-
     useEffect(() => {
-        if (currentChatRoomId === null) {
-            toggleSideBar();
-        } else {
-            const fetchMessages = async () => {
-                const chatMessages = await getChatMessages(currentChatRoomId, 0);
-                setMessages(chatMessages);
-            };
-
-            if (currentChatRoomId && userInfo?.id) {
-                fetchMessages();
-            }
+        if (currentChatRoomId !== null) {
+            pageRef.current = 0; // ✅ 페이지 초기화
+            setMessages([]); // ✅ 메시지 초기화
+            setHasMore(true);
+            isInitialLoadCompleteRef.current = false;
+            fetchMessages(currentChatRoomId, 0);
         }
     }, [currentChatRoomId]);
 
     useEffect(() => {
+        if (currentChatRoomId !== null && pageRef.current > 0) {
+            fetchMessages(currentChatRoomId, pageRef.current);
+        }
+    }, [pageRef.current]);
 
-    }, []);
+    const fetchMessages = async (chatRoomId: number, page: number) => {
+        const chatMessages = await getChatMessages(chatRoomId, page);
+
+        if (chatMessages.length === 0) {
+            setHasMore(false);
+        } else {
+            setMessages(prevMessages => [...chatMessages, ...prevMessages]);
+        }
+    };
+
+    useEffect(() => {
+        const chatContainer = chatContainerRef.current;
+        if (!chatContainer) return;
+        const handleScroll = () => {
+            if (chatContainer.scrollTop === 0 && hasMore && !isFetching) {
+                setIsFetching(true);
+                setPrevHeight(chatContainer.scrollHeight);
+                pageRef.current += 1;
+            }
+        };
+
+        chatContainer.addEventListener("scroll", handleScroll);
+        return () => chatContainer.removeEventListener("scroll", handleScroll);
+    }, [hasMore, isFetching, currentChatRoomId]);
 
     useLayoutEffect(() => {
-        if (chatContainerRef.current) {
+        if (!chatContainerRef.current || messages.length === 0) return;
+        if (!isInitialLoadCompleteRef.current) {
             requestAnimationFrame(() => {
                 chatContainerRef.current!.scrollTop = chatContainerRef.current!.scrollHeight;
+                isInitialLoadCompleteRef.current = true;
             });
         }
-    }, [currentChatRoomId, messages]);
+    }, [messages]);
 
+    // 페이지네이션 후 스크롤 위치 조정
+    useLayoutEffect(() => {
+        if (!chatContainerRef.current || !isFetching) return;
+        requestAnimationFrame(() => {
+            const chatContainer = chatContainerRef.current!;
+            const newScrollHeight = chatContainer.scrollHeight;
+            const scrollOffset = newScrollHeight - prevHeight;
+            if (scrollOffset > 0) {
+                chatContainer.scrollTop += scrollOffset;
+                console.log(chatContainer.scrollTop)
+            }
+            setIsFetching(false);
+        });
+    }, [messages]);
 
     const handleLeaveRoom = async () => {
         if (!currentChatRoomId) return;
@@ -169,6 +216,17 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
         setIsInviteModalOpen(false);
     }
 
+    const handleDelete = (msgId: number) => {
+        if (!stompClient || !isConnected || !currentChatRoomId) return;
+
+        if (window.confirm("채팅을 삭제하시겠습니까?")) {
+            stompClient.publish({
+                destination: "/pub/delete",
+                body: JSON.stringify({chatRoomId: currentChatRoomId, userId: userInfo.id, msgId: msgId}),
+            });
+        }
+    };
+
 
     return (
         <>
@@ -188,8 +246,8 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
                 <div className="chat-window">
                     <div id="chatMessages" ref={chatContainerRef}>
                         {messages.map((msg: Message) => (
-                            <MessageItem key={msg.msgId} msg={msg} currentUserId={userInfo?.id}
-                                         deleteMessage={deleteMessage}/>
+                            <MessageItem key={msg.msgId} msg={msg} currentUserId={userInfo?.id} onDelete={handleDelete}
+                                         currentChatRoomId={currentChatRoomId}/>
                         ))}
                     </div>
                     <div className="input">
