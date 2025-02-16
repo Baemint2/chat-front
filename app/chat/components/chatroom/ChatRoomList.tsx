@@ -2,8 +2,8 @@
 
 import React, {useMemo} from "react";
 import ChatRoomItem from "./ChatRoomItem";
-import { ChatRoom } from "@/app/types/chatRoomTypes";
-import {UserInfo} from "@/app/types/userTypes";
+import { ChatRoom } from "@/app/types/chatroom";
+import {UserInfo} from "@/app/types/userinfo";
 
 interface ChatRoomListProps {
     chatRooms: ChatRoom[],

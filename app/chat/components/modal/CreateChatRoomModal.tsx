@@ -2,7 +2,7 @@
 
 import React from "react";
 import BaseModal from "./BaseModal";
-import { UserInfo } from "@/app/types/userTypes";
+import { UserInfo } from "@/app/types/userinfo";
 
 interface CreateChatRoomModalProps {
     isOpen: boolean;

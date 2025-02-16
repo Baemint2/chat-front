@@ -2,8 +2,9 @@
 
 import React, {useEffect, useState} from "react";
 import anonymous from "@/public/img/anonymous.png";
-import {UserInfo} from '@/app/types/userTypes';
+import {UserInfo} from '@/app/types/userinfo';
 import Image from "next/image";
+import {ChatRoom} from "@/app/types/chatroom";
 
 interface IUser {
     username: string;
@@ -11,21 +12,11 @@ interface IUser {
     nickname: string;
 }
 
-
-interface IChatRoomInfo {
-    chatRoomId: number;
-    chatRoomTitle?: string;
-    createdAt: string;
-    creator: string;
-    participantUsers: UserInfo[]
-    updatedAt?: string
-}
-
 interface BaseModalProps {
     isOpen: boolean,
     isClose: () => void
     modalTitle: string,
-    chatRoomInfo?: IChatRoomInfo,
+    chatRoomInfo?: ChatRoom,
     userInfo?: UserInfo,
 }
 const BaseModal: React.FC<BaseModalProps> = ({

@@ -1,9 +1,9 @@
 'use client'
 
 import React from "react";
-import {ChatRoom} from "@/app/types/chatRoomTypes";
+import {ChatRoom} from "@/app/types/chatroom";
 import Anonymous from "@/public/img/anonymous.png";
-import {UserInfo} from "@/app/types/userTypes";
+import {UserInfo} from "@/app/types/userinfo";
 import {updateLastSeenDt} from "@/app/api/chatRoom";
 import Image from "next/image";
 

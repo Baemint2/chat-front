@@ -5,7 +5,7 @@ import write from "@/public/img/write.png"
 import messageImg from "@/public/img/message.png"
 import React, {useEffect, useState} from "react";
 import ChatRoomList from "./components/chatroom/ChatRoomList";
-import { UserInfo } from "../types/userTypes";
+import { UserInfo } from "../types/userinfo";
 import CreateChatRoomModal from "./components/modal/CreateChatRoomModal";
 import MidChat from "./components/MidChat";
 import {useStomp} from "@/app/StompContext";
@@ -13,28 +13,13 @@ import {useBeforeUnload} from "react-router-dom";
 import {getChatRoom, updateLastSeenDt} from "../api/chatRoom";
 import {getUserInfo} from "../api/userInfo";
 import Image from "next/image";
-
-interface IChatRoomInfo {
-    chatRoomId: number;
-    chatRoomTitle?: string;
-    createdAt: string;
-    creator: string;
-    participantUsers: UserInfo[]
-    updatedAt?: string
-    unreadCount?: number | 0
-    latelyMessage?: string
-}
-
-interface Unread {
-    chatRoomId: number,
-    serId: number,
-    unreadCount: number | 0,
-}
+import {ChatRoom} from "@/app/types/chatroom";
+import {Unread} from "@/app/types/unread";
 
 export default function Chat(){
     const [userInfo, setUserInfo] = useState<UserInfo>();
-    const [chatRooms, setChatRooms] = useState<IChatRoomInfo[]>([]);
-    const [chatRoomInfo, setChatRoomInfo] = useState<IChatRoomInfo>();
+    const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
+    const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoom>();
     const [currentChatRoomId, setCurrentChatRoomId] = useState<number | null>(null);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -58,9 +43,6 @@ export default function Chat(){
         fetchUserInfo();
     }, []);
 
-    useEffect(() => {
-        console.log("렌더링 후 chatRooms 상태:", chatRooms);
-    }, [chatRooms]);
 
     useEffect(() => {
         if (currentChatRoomId) {
@@ -84,7 +66,6 @@ export default function Chat(){
 
         const subscription2 = stompClient.subscribe(`/queue/unreadCount/${userInfo?.username}`, (message) => {
             const unreadCounts = JSON.parse(message.body);
-            console.log(unreadCounts)
 
             setChatRooms((prevRooms) => {
                 return prevRooms.map((room) => {
@@ -93,7 +74,6 @@ export default function Chat(){
                     if (unreadData) {
                         return { ...room, unreadCount: unreadData.unreadCount };
                     }
-                    console.log(room)
                     return room;
                 });
             });

@@ -2,22 +2,13 @@
 
 import React, {useEffect, useState} from "react";
 import BaseModal from "./BaseModal";
-import {UserInfo} from "@/app/types/userTypes";
-
-interface IChatRoomInfo {
-    chatRoomId: number;
-    chatRoomTitle?: string;
-    createdAt: string;
-    creator: string;
-    participantUsers: UserInfo[]
-    updatedAt?: string
-}
+import {ChatRoom} from "@/app/types/chatroom";
 
 interface InviteModalProps {
     isOpen: boolean,
     isClose: () => void
     modalTitle: string
-    chatRoomInfo?: IChatRoomInfo
+    chatRoomInfo?: ChatRoom
 }
 
 const InviteModal: React.FC<InviteModalProps> = ({
