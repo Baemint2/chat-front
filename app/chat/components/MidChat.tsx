@@ -115,10 +115,15 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
 
     useLayoutEffect(() => {
         if (!chatContainerRef.current || messages.length === 0) return;
+
         if (!isInitialLoadCompleteRef.current) {
             requestAnimationFrame(() => {
                 chatContainerRef.current!.scrollTop = chatContainerRef.current!.scrollHeight;
                 isInitialLoadCompleteRef.current = true;
+            });
+        } else {
+            requestAnimationFrame(() => {
+                chatContainerRef.current!.scrollTop = chatContainerRef.current!.scrollHeight;
             });
         }
     }, [messages]);
@@ -132,7 +137,6 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
             const scrollOffset = newScrollHeight - prevHeight;
             if (scrollOffset > 0) {
                 chatContainer.scrollTop += scrollOffset;
-                console.log(chatContainer.scrollTop)
             }
             setIsFetching(false);
         });
@@ -143,12 +147,13 @@ const MidChat: React.FC<MidChatProps> = ({currentChatRoomId, chatRoomInfo, userI
 
         setIsLeaving(true);
 
-        leaveChatRoom(currentChatRoomId, userInfo?.id);
+        leaveChatRoom(currentChatRoomId, userInfo?.username);
+
+        setCurrentChatRoomId(null); // 선택된 채팅방 해제
 
         setChatRooms((prevRooms) => prevRooms.filter(room => room.chatRoomId !== currentChatRoomId));
 
         setIsLeaving(false);
-        setCurrentChatRoomId(null); // 선택된 채팅방 해제
     };
 
     const toggleSideBar = () => {

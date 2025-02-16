@@ -1,8 +1,8 @@
 // 마지막 접속시간 업데이트
-export const updateLastSeenDt = (chatRoomId: number, userId: number | undefined) => {
+export const updateLastSeenDt = (chatRoomId: number, username: string | undefined) => {
     const body = {
         chatRoomId,
-        userId
+        username
     }
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/chat-room/last-seen-update`, {
         method: 'post',
@@ -29,10 +29,10 @@ export const getChatMessages = async (chatRoomNo: number | null, pageNum: number
 }
 
 // 채팅방 나가기
-export const leaveChatRoom = (chatRoomId: number | null, userId: number | undefined) => {
+export const leaveChatRoom = (chatRoomId: number | null, username: string | undefined) => {
     const body = {
         chatRoomId,
-        userId,
+        username,
     }
 
     if (window.confirm("방을 나가시겠습니까?")) {

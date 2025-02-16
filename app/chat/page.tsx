@@ -3,7 +3,7 @@
 import "../css/chat.css"
 import write from "@/public/img/write.png"
 import messageImg from "@/public/img/message.png"
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import ChatRoomList from "./components/chatroom/ChatRoomList";
 import { UserInfo } from "../types/userinfo";
 import CreateChatRoomModal from "./components/modal/CreateChatRoomModal";
@@ -51,14 +51,21 @@ export default function Chat(){
         }
     }, [currentChatRoomId, chatRooms]);
 
+    const chatRoomsRef = useRef(chatRooms);
+
     useEffect(() => {
         if (!stompClient || !stompClient.connected) return;
 
+        // 최신 chatRooms 값을 유지하기 위해 useRef 사용
+        chatRoomsRef.current = chatRooms;
 
         const subscription = stompClient.subscribe(`/sub/chat/update/${userInfo?.username}`, (message) => {
             const updatedRoom = JSON.parse(message.body);
+
+            // 🔥 최신 chatRooms 상태를 기반으로 업데이트
             setChatRooms(updatedRoom);
         });
+
         stompClient.publish({
             destination: "/pub/unread",
             body: JSON.stringify({ userId: userInfo?.id }),
@@ -70,7 +77,6 @@ export default function Chat(){
             setChatRooms((prevRooms) => {
                 return prevRooms.map((room) => {
                     const unreadData = unreadCounts.find((unread: Unread) => unread.chatRoomId === room.chatRoomId);
-
                     if (unreadData) {
                         return { ...room, unreadCount: unreadData.unreadCount };
                     }
@@ -83,11 +89,11 @@ export default function Chat(){
             subscription.unsubscribe();
             subscription2.unsubscribe();
         };
-    }, [stompClient, stompClient?.connected]);
+    }, [stompClient, stompClient?.connected, userInfo]);
 
     useBeforeUnload(() => {
         if (currentChatRoomId !== null) {
-            updateLastSeenDt(currentChatRoomId, userInfo?.id);
+            updateLastSeenDt(currentChatRoomId, userInfo?.username);
         }
     })
 

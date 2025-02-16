@@ -23,11 +23,11 @@ const ChatRoomItem: React.FC<ChatRoomProps> = ({
 
     const handleClick = () => {
         if (currentChatRoomId === chatRoom.chatRoomId) {
-            updateLastSeenDt(currentChatRoomId, userInfo?.id)
+            updateLastSeenDt(currentChatRoomId, userInfo?.username)
             setCurrentChatRoomId(null);
         } else {
             if (currentChatRoomId !== null) {
-                updateLastSeenDt(currentChatRoomId, userInfo?.id)
+                updateLastSeenDt(currentChatRoomId, userInfo?.username)
             }
             chatRoom.unreadCount = 0;
             setCurrentChatRoomId(chatRoom.chatRoomId);
